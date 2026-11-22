@@ -5,15 +5,15 @@ Portafolio personal: ingeniería y análisis de datos, automatización de proces
 - **Diseño:** generado con Google Stitch (referencia externa, fuera del repo: `../portfolio(1)/portfolio/design/stitch/`)
 - **Contenido:** `content/perfil.md`
 - **CV:** `public/cv/CV_Gonzalo_Nazzetta.pdf`
-- **Stack previsto:** Astro + Tailwind CSS, deploy en GitHub Pages con GitHub Actions
+- **Stack:** Astro + Tailwind CSS, deploy en GitHub Pages con GitHub Actions
 
 Las instrucciones de desarrollo para Claude Code están en `CLAUDE.md`.
 
-## Desarrollo local (una vez inicializado el proyecto)
+## Desarrollo local
 
 ```bash
 npm install
-npm run dev      # http://localhost:4321
+npm run dev      # http://localhost:4321/Gonzalo-Nazzetta-Portafolio/
 npm run build    # genera dist/
 ```
 
@@ -27,3 +27,18 @@ npm run build    # genera dist/
 5. Botones: `links` con `{ tipo: "docs", label: "Documentación Técnica", url: "https://..." }`.
    Tipos: `docs`, `repo`, `paper`, `demo`, `video`, `presentacion`, `api`, `otro`. El primero se ve como botón principal.
 6. Cuerpo: secciones `## Desafíos técnicos`, `## Solución implementada`, `## Impacto`, `## Metodología`. Las que no estén no se muestran.
+
+## Imágenes para compartir
+
+`public/og-image.png` (1200×630) y `public/apple-touch-icon.png` se generan con:
+
+```bash
+node scripts/generar-imagenes.mjs
+```
+
+## Deploy
+
+Cada push a `main` construye y publica el sitio en GitHub Pages
+(`.github/workflows/deploy.yml`): https://gon-nazz19.github.io/Gonzalo-Nazzetta-Portafolio/
+
+Requisito único en GitHub: **Settings → Pages → Source: GitHub Actions**.
