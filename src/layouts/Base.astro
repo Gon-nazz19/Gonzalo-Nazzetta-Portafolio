@@ -1,0 +1,59 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource-variable/space-grotesk';
+import '@fontsource-variable/jetbrains-mono';
+import '../styles/global.css';
+import { datos } from '../data/perfil';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = `${datos.nombreCorto} — ${datos.titulo}`,
+  description = `${datos.nombreCorto}: ${datos.bajada}. Datos, análisis y automatización de procesos.`,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0A1628" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+  </head>
+  <body>
+    <a
+      href="#contenido"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-sm focus:left-sm focus:z-50 focus:px-md focus:py-sm focus:rounded focus:bg-accent focus:text-on-accent font-label text-label-lg"
+    >
+      Saltar al contenido
+    </a>
+    <div class="min-h-screen flex flex-col topo-bg relative overflow-x-clip">
+      <slot />
+    </div>
+    <script>
+      const els = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                e.target.classList.add('is-visible');
+                io.unobserve(e.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -8% 0px' },
+        );
+        els.forEach((el) => io.observe(el));
+      } else {
+        els.forEach((el) => el.classList.add('is-visible'));
+      }
+    </script>
+  </body>
+</html>
