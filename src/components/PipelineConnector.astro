@@ -1,0 +1,37 @@
+---
+import { ArrowRight, Brush, FileText, LayoutDashboard, Workflow } from '@lucide/astro';
+
+const pasos = [
+  { label: 'archivo', Icono: FileText },
+  { label: 'limpieza', Icono: Brush },
+  { label: 'transformación', Icono: Workflow },
+  { label: 'tablero', Icono: LayoutDashboard },
+];
+---
+
+<div class="py-lg border-b border-outline/60 bg-surface/40">
+  <ol
+    aria-label="Flujo de datos: archivo, limpieza, transformación y tablero"
+    class="max-w-[1200px] mx-auto px-md lg:px-lg flex items-center justify-center gap-sm lg:gap-md flex-wrap"
+  >
+    {
+      pasos.map(({ label, Icono }, i) => {
+        const ultimo = i === pasos.length - 1;
+        return (
+          <li class="inline-flex items-center gap-sm lg:gap-md">
+            <span
+              class:list={[
+                'inline-flex items-center gap-xs px-md py-xs rounded-full border font-mono text-mono-sm',
+                ultimo ? 'bg-primary/20 border-accent text-accent' : 'bg-surface border-accent/30 text-on-surface',
+              ]}
+            >
+              <Icono class="w-4 h-4 text-accent" aria-hidden="true" />
+              {label}
+            </span>
+            {!ultimo && <ArrowRight class="w-4 h-4 text-accent" aria-hidden="true" />}
+          </li>
+        );
+      })
+    }
+  </ol>
+</div>

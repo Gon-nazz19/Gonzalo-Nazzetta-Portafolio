@@ -1,0 +1,14 @@
+---
+// Encabezado de sección estilo código: `> sobre_mi.py`, `SELECT * FROM proyectos`…
+interface Props {
+  id: string;
+  codigo: string;
+  titulo: string;
+}
+const { id, codigo, titulo } = Astro.props;
+---
+
+<div class="flex flex-col gap-sm">
+  <span class="font-mono text-mono-lg text-accent" aria-hidden="true">{codigo}</span>
+  <h2 id={id} class="font-headline text-headline-lg-mobile lg:text-headline-lg text-on-surface">{titulo}</h2>
+</div>
