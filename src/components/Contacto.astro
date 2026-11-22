@@ -1,0 +1,73 @@
+---
+import { Briefcase, Download, Mail } from '@lucide/astro';
+import { siGithub } from 'simple-icons';
+import SectionHeader from './SectionHeader.astro';
+import SimpleIcon from './SimpleIcon.astro';
+import { datos } from '../data/perfil';
+import { withBase } from '../lib/url';
+
+const usuarioGithub = datos.github.replace('https://', '');
+const usuarioLinkedin = datos.linkedin.replace(/^https:\/\/www\.linkedin\.com/, '');
+---
+
+<section id="contacto" aria-labelledby="contacto-titulo" class="py-2xl lg:py-section">
+  <div class="max-w-[1200px] mx-auto px-md lg:px-lg flex flex-col gap-xl">
+    <SectionHeader id="contacto-titulo" codigo="contacto.sh" titulo="Contacto" />
+
+    <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-lg">
+      <li>
+        <a
+          href={`mailto:${datos.email}`}
+          class="h-full bg-surface border border-accent/20 rounded-lg p-lg flex items-center gap-md hover:border-accent hover:bg-surface-elevated transition-colors duration-200"
+        >
+          <Mail class="w-6 h-6 shrink-0 text-accent" aria-hidden="true" />
+          <span class="min-w-0">
+            <span class="font-label text-title-md text-on-surface block">Correo electrónico</span>
+            <span class="font-mono text-mono-sm text-accent break-all">{datos.email}</span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a
+          href={datos.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="h-full bg-surface border border-accent/20 rounded-lg p-lg flex items-center gap-md hover:border-accent hover:bg-surface-elevated transition-colors duration-200"
+        >
+          <Briefcase class="w-6 h-6 shrink-0 text-accent" aria-hidden="true" />
+          <span class="min-w-0">
+            <span class="font-label text-title-md text-on-surface block">LinkedIn <span class="sr-only">(se abre en una pestaña nueva)</span></span>
+            <span class="font-mono text-mono-sm text-accent break-all">{usuarioLinkedin}</span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a
+          href={datos.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="h-full bg-surface border border-accent/20 rounded-lg p-lg flex items-center gap-md hover:border-accent hover:bg-surface-elevated transition-colors duration-200"
+        >
+          <SimpleIcon icon={siGithub} class="w-6 h-6 shrink-0 text-accent" />
+          <span class="min-w-0">
+            <span class="font-label text-title-md text-on-surface block">GitHub <span class="sr-only">(se abre en una pestaña nueva)</span></span>
+            <span class="font-mono text-mono-sm text-accent break-all">{usuarioGithub}</span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a
+          href={withBase(datos.cv)}
+          download
+          class="h-full bg-linear-to-br from-primary/25 to-surface border border-accent/40 rounded-lg p-lg flex items-center gap-md hover:border-accent transition-colors duration-200"
+        >
+          <Download class="w-6 h-6 shrink-0 text-accent" aria-hidden="true" />
+          <span class="min-w-0">
+            <span class="font-label text-title-md text-on-surface block">Descargar CV</span>
+            <span class="font-mono text-mono-sm text-accent">PDF</span>
+          </span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>

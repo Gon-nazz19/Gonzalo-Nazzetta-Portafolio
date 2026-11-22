@@ -1,0 +1,16 @@
+---
+import { Compass } from '@lucide/astro';
+import { datos } from '../data/perfil';
+
+const anio = new Date().getFullYear();
+---
+
+<footer class="border-t border-outline bg-background py-lg">
+  <div class="max-w-[1200px] mx-auto px-md lg:px-lg flex flex-col md:flex-row items-center justify-between gap-md">
+    <p class="font-mono text-mono-sm text-on-surface-muted">© {anio} {datos.nombreCorto} · Freyre, Córdoba</p>
+    <p class="inline-flex items-center gap-xs font-mono text-mono-sm text-accent">
+      <Compass class="w-4 h-4" aria-hidden="true" />
+      Ingeniería en Sistemas · UTN FRSF
+    </p>
+  </div>
+</footer>
