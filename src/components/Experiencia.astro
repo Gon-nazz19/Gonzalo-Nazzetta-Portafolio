@@ -1,0 +1,79 @@
+---
+import { CircleCheck } from '@lucide/astro';
+import SectionHeader from './SectionHeader.astro';
+import { experiencia } from '../data/perfil';
+
+// Color del nodo de cada etapa del "pipeline" (de la más reciente a la más antigua)
+const nodos = ['bg-accent', 'bg-primary', 'bg-secondary', 'bg-on-surface-muted'];
+---
+
+<section id="experiencia" aria-labelledby="experiencia-titulo" class="py-2xl lg:py-section border-b border-outline/60">
+  <div class="max-w-[1200px] mx-auto px-md lg:px-lg flex flex-col gap-xl">
+    <SectionHeader id="experiencia-titulo" codigo="SELECT * FROM experiencia" titulo="Experiencia" />
+
+    <div class="relative pl-xl">
+      <!-- Tubería del pipeline -->
+      <div class="absolute left-[11px] top-4 bottom-4 w-0.5 bg-linear-to-b from-accent via-primary to-outline" aria-hidden="true">
+        <span class="flujo absolute left-1/2 -translate-x-1/2 w-1.5 h-6 rounded-full bg-accent/80 blur-[1px]"></span>
+      </div>
+
+      <ol class="flex flex-col gap-lg">
+        {
+          experiencia.map((e, i) => (
+            <li class:list={['reveal relative bg-surface border rounded-lg p-lg flex flex-col gap-md', i === 0 ? 'border-accent/30' : 'border-accent/20']}>
+              <span
+                class:list={['absolute -left-[29px] top-7 w-4 h-4 rounded-full border-4 border-background', nodos[i % nodos.length]]}
+                aria-hidden="true"
+              />
+              <div class="flex flex-wrap items-start justify-between gap-md">
+                <div class="flex flex-col gap-xs">
+                  <h3 class="font-headline text-title-lg text-on-surface text-balance">
+                    {e.puesto} <span class="text-on-surface-muted font-normal">— {e.organizacion}</span>
+                  </h3>
+                  {e.periodo && <p class="font-mono text-mono-sm text-accent">{e.periodo}</p>}
+                </div>
+                {e.estado && (
+                  <span class="inline-flex items-center gap-xs px-md py-xs rounded-full bg-success/15 border border-success/40 text-success font-mono text-mono-sm whitespace-nowrap">
+                    <CircleCheck class="w-3.5 h-3.5" aria-hidden="true" />
+                    status: {e.estado}
+                  </span>
+                )}
+              </div>
+              <ul class="lista-triangulo flex flex-col gap-xs font-body text-body-md text-on-surface-muted">
+                {e.items.map((it) => <li>{it}</li>)}
+              </ul>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .flujo {
+    top: 0;
+    animation: bajar 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  @keyframes bajar {
+    0% {
+      top: 0;
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      top: calc(100% - 1.5rem);
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .flujo {
+      display: none;
+    }
+  }
+</style>
