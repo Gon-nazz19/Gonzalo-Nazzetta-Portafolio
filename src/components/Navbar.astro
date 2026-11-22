@@ -1,0 +1,116 @@
+---
+import { Menu, X } from '@lucide/astro';
+
+const links = [
+  { href: '#inicio', label: 'Inicio' },
+  { href: '#sobre-mi', label: 'Sobre mí' },
+  { href: '#experiencia', label: 'Experiencia' },
+  { href: '#proyectos', label: 'Proyectos' },
+  { href: '#habilidades', label: 'Habilidades' },
+  { href: '#formacion', label: 'Formación' },
+  { href: '#publicaciones', label: 'Publicaciones' },
+  { href: '#contacto', label: 'Contacto' },
+];
+---
+
+<header class="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-outline">
+  <div class="max-w-[1200px] mx-auto px-md lg:px-lg h-16 flex items-center justify-between gap-lg">
+    <a href="#inicio" class="inline-flex items-center gap-sm group rounded" aria-label="Gonzalo Nazzetta, ir al inicio">
+      <span
+        class="w-10 h-10 rounded bg-surface border border-accent/30 flex items-center justify-center font-headline text-title-md text-accent group-hover:border-accent transition-colors duration-200"
+        aria-hidden="true"
+      >
+        GN
+      </span>
+    </a>
+
+    <nav aria-label="Navegación principal" class="hidden lg:block">
+      <ul class="flex items-center gap-lg">
+        {
+          links.map((l) => (
+            <li>
+              <a
+                href={l.href}
+                data-nav-link
+                class="font-label text-label-lg text-on-surface-muted hover:text-accent aria-[current=true]:text-on-surface transition-colors duration-200 rounded"
+              >
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <button
+      id="menu-btn"
+      type="button"
+      aria-label="Abrir menú"
+      aria-expanded="false"
+      aria-controls="menu-movil"
+      class="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded bg-surface border border-outline text-on-surface hover:border-accent transition-colors"
+    >
+      <Menu class="icon-open w-5 h-5" aria-hidden="true" />
+      <X class="icon-close w-5 h-5 hidden" aria-hidden="true" />
+    </button>
+  </div>
+
+  <nav id="menu-movil" aria-label="Navegación móvil" class="hidden lg:hidden border-t border-outline bg-surface px-md pb-md pt-xs">
+    <ul class="flex flex-col gap-xs">
+      {
+        links.map((l) => (
+          <li>
+            <a href={l.href} class="block py-sm font-label text-label-lg text-on-surface-muted hover:text-accent">
+              {l.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const btn = document.getElementById('menu-btn')!;
+  const menu = document.getElementById('menu-movil')!;
+
+  function setOpen(open: boolean) {
+    btn.setAttribute('aria-expanded', String(open));
+    btn.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    menu.classList.toggle('hidden', !open);
+    btn.querySelector('.icon-open')?.classList.toggle('hidden', open);
+    btn.querySelector('.icon-close')?.classList.toggle('hidden', !open);
+  }
+
+  btn.addEventListener('click', () => setOpen(btn.getAttribute('aria-expanded') !== 'true'));
+  menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
+      setOpen(false);
+      btn.focus();
+    }
+  });
+
+  // Resalta el link de la sección visible
+  const navLinks = document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]');
+  const sections = [...navLinks]
+    .map((a) => document.querySelector<HTMLElement>(a.getAttribute('href')!))
+    .filter((s): s is HTMLElement => s !== null);
+
+  if ('IntersectionObserver' in window && sections.length) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          navLinks.forEach((a) => {
+            const active = a.getAttribute('href') === `#${e.target.id}`;
+            if (active) a.setAttribute('aria-current', 'true');
+            else a.removeAttribute('aria-current');
+          });
+        }
+      },
+      { rootMargin: '-45% 0px -50% 0px' },
+    );
+    sections.forEach((s) => io.observe(s));
+  }
+</script>

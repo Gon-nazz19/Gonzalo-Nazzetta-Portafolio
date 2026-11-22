@@ -1,0 +1,84 @@
+---
+// Gráfico decorativo del hero: serie real → predicción con banda de confianza
+// y un sol (motivo del paper de predicción fotovoltaica). Sin datos numéricos.
+---
+
+<svg viewBox="0 0 920 460" class="hero-chart w-[820px] h-[420px] mr-lg" fill="none" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="confBand" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#4FC3F7" stop-opacity="0.02"></stop>
+      <stop offset="55%" stop-color="#1E6FFF" stop-opacity="0.18"></stop>
+      <stop offset="100%" stop-color="#4FC3F7" stop-opacity="0.26"></stop>
+    </linearGradient>
+    <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#4FC3F7" stop-opacity="0.38"></stop>
+      <stop offset="60%" stop-color="#1E6FFF" stop-opacity="0.12"></stop>
+      <stop offset="100%" stop-color="#0A1628" stop-opacity="0"></stop>
+    </radialGradient>
+  </defs>
+  <g stroke="#253144" stroke-width="1" stroke-dasharray="4 6">
+    <line x1="60" y1="90" x2="880" y2="90"></line>
+    <line x1="60" y1="180" x2="880" y2="180"></line>
+    <line x1="60" y1="270" x2="880" y2="270"></line>
+    <line x1="60" y1="360" x2="880" y2="360"></line>
+  </g>
+  <circle class="sun-glow" cx="670" cy="115" r="76" fill="url(#sunGlow)"></circle>
+  <circle cx="670" cy="115" r="24" stroke="#4FC3F7" stroke-opacity="0.7" stroke-width="1.5" fill="#0F2240"></circle>
+  <g class="sun-rays" stroke="#4FC3F7" stroke-opacity="0.55" stroke-width="1.5" stroke-linecap="round">
+    <line x1="670" y1="74" x2="670" y2="83"></line>
+    <line x1="670" y1="147" x2="670" y2="156"></line>
+    <line x1="629" y1="115" x2="638" y2="115"></line>
+    <line x1="702" y1="115" x2="711" y2="115"></line>
+    <line x1="641" y1="86" x2="647" y2="92"></line>
+    <line x1="693" y1="138" x2="699" y2="144"></line>
+    <line x1="699" y1="86" x2="693" y2="92"></line>
+    <line x1="647" y1="138" x2="641" y2="144"></line>
+  </g>
+  <path d="M470 250 C 540 205, 600 120, 670 115 C 745 110, 810 175, 880 140 L 880 235 C 810 260, 745 200, 670 190 C 600 185, 540 255, 470 285 Z" fill="url(#confBand)"></path>
+  <path class="serie-real" pathLength="1" d="M60 330 C 125 310, 175 260, 235 280 C 295 300, 345 215, 405 235 C 435 245, 455 262, 470 266" stroke="#1E6FFF" stroke-width="3" stroke-linecap="round"></path>
+  <path class="prediccion" d="M470 266 C 540 230, 600 152, 670 152 C 745 152, 810 218, 880 188" stroke="#4FC3F7" stroke-width="2.5" stroke-dasharray="7 6" stroke-linecap="round"></path>
+  <line x1="470" y1="75" x2="470" y2="375" stroke="#4FC3F7" stroke-opacity="0.35" stroke-dasharray="3 4"></line>
+  <circle cx="470" cy="266" r="5" fill="#4FC3F7"></circle>
+  <circle cx="670" cy="152" r="4" fill="#4FC3F7"></circle>
+</svg>
+
+<style>
+  .serie-real {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: dibujar 1.6s cubic-bezier(0.2, 0, 0, 1) 0.2s forwards;
+  }
+  .prediccion {
+    animation: fluir 2.4s linear infinite;
+  }
+  .sun-glow {
+    transform-origin: 670px 115px;
+    animation: latido 5s ease-in-out infinite;
+  }
+  @keyframes dibujar {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes fluir {
+    to {
+      stroke-dashoffset: -26;
+    }
+  }
+  @keyframes latido {
+    50% {
+      transform: scale(1.08);
+      opacity: 0.8;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .serie-real {
+      animation: none;
+      stroke-dashoffset: 0;
+    }
+    .prediccion,
+    .sun-glow {
+      animation: none;
+    }
+  }
+</style>
