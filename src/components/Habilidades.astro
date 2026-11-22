@@ -1,0 +1,89 @@
+---
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { ChartNoAxesColumnIncreasing, Database, LayoutDashboard } from '@lucide/astro';
+import SectionHeader from './SectionHeader.astro';
+import SimpleIcon from './SimpleIcon.astro';
+import { categorias, destacados, metodologias } from '../data/habilidades';
+import { withBase } from '../lib/url';
+
+const genericos = {
+  'base-de-datos': Database,
+  tablero: LayoutDashboard,
+  barras: ChartNoAxesColumnIncreasing,
+} as const;
+
+// Color de marca para el hover; si es muy oscuro para el fondo, se usa el texto claro.
+function colorHover(hex: string): string {
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
+  const lin = (c: number) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+  const lum = 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+  return lum < 0.12 ? '#E6F1FF' : `#${hex}`;
+}
+
+const logos = destacados.map((d) => {
+  if ('icono' in d) return { nombre: d.nombre, icono: d.icono, hover: colorHover(d.icono.hex) };
+  const oficial = d.archivoOficial && existsSync(join(process.cwd(), 'public', d.archivoOficial)) ? withBase(d.archivoOficial) : undefined;
+  return { nombre: d.nombre, Generico: genericos[d.generico], oficial, hover: '#4FC3F7' };
+});
+---
+
+<section id="habilidades" aria-labelledby="habilidades-titulo" class="py-2xl lg:py-section border-b border-outline/60">
+  <div class="max-w-[1200px] mx-auto px-md lg:px-lg flex flex-col gap-xl">
+    <SectionHeader id="habilidades-titulo" codigo="stack --list-all" titulo="Habilidades técnicas" />
+
+    <ul class="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-7 gap-sm" aria-label="Tecnologías destacadas">
+      {
+        logos.map((l) => (
+          <li
+            class="group reveal flex flex-col items-center justify-center gap-xs p-md rounded bg-surface border border-outline hover:border-accent/50 transition-colors duration-200"
+            style={`--marca:${l.hover}`}
+          >
+            {l.icono && (
+              <SimpleIcon icon={l.icono} class="w-8 h-8 text-accent/80 group-hover:text-(--marca) group-hover:scale-110 transition duration-200" />
+            )}
+            {l.oficial && <img src={l.oficial} alt="" width="32" height="32" class="w-8 h-8 opacity-80 group-hover:opacity-100 transition" />}
+            {!l.icono && !l.oficial && l.Generico && (
+              <l.Generico class="w-8 h-8 text-accent/80 group-hover:text-accent group-hover:scale-110 transition duration-200" aria-hidden="true" />
+            )}
+            <span class="font-mono text-label-sm text-on-surface text-center">{l.nombre}</span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg">
+      {
+        categorias.map((c) => (
+          <section class="reveal bg-surface border border-accent/20 rounded-lg p-lg flex flex-col gap-md" aria-label={c.nombre}>
+            <h3 class="flex items-center justify-between gap-sm font-mono text-mono-lg text-accent uppercase">
+              {c.nombre}
+              <span class="inline-flex items-center justify-center min-w-7 h-6 px-sm rounded-full bg-primary/15 border border-accent/25 font-mono text-label-sm text-accent">
+                <span class="sr-only">Cantidad: </span>
+                {c.items.length}
+              </span>
+            </h3>
+            <ul class="flex flex-wrap gap-xs">
+              {c.items.map((it) => (
+                <li class="px-sm py-xs rounded-full bg-surface-elevated border border-accent/20 text-on-surface font-mono text-label-sm">{it}</li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+
+      <section class="reveal md:col-span-2 bg-surface border border-accent/30 rounded-lg p-lg flex flex-col gap-md" aria-label="Metodologías y conceptos">
+        <h3 class="flex items-center justify-between gap-sm font-mono text-mono-lg text-accent uppercase">
+          Metodologías y conceptos
+          <span class="inline-flex items-center justify-center min-w-7 h-6 px-sm rounded-full bg-primary/15 border border-accent/25 font-mono text-label-sm text-accent">
+            <span class="sr-only">Cantidad: </span>
+            {metodologias.length}
+          </span>
+        </h3>
+        <ul class="lista-triangulo grid grid-cols-1 sm:grid-cols-2 gap-x-lg gap-y-xs font-body text-body-sm text-on-surface-muted">
+          {metodologias.map((m) => <li>{m}</li>)}
+        </ul>
+      </section>
+    </div>
+  </div>
+</section>
