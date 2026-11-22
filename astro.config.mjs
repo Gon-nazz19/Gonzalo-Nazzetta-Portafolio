@@ -7,7 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://gon-nazz19.github.io',
   base: '/Gonzalo-Nazzetta-Portafolio',
-  trailingSlash: 'ignore',
+  trailingSlash: 'always',
   integrations: [sitemap()],
   vite: {
     plugins: [tailwindcss()],

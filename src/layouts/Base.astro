@@ -4,6 +4,7 @@ import '@fontsource-variable/space-grotesk';
 import '@fontsource-variable/jetbrains-mono';
 import '../styles/global.css';
 import { datos } from '../data/perfil';
+import { withBase } from '../lib/url';
 
 interface Props {
   title?: string;
@@ -14,6 +15,20 @@ const {
   title = `${datos.nombreCorto} — ${datos.titulo}`,
   description = `${datos.nombreCorto}: ${datos.bajada}. Datos, análisis y automatización de procesos.`,
 } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL(withBase('og-image.png'), Astro.site).href;
+const personaJsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: datos.nombre,
+  jobTitle: datos.titulo,
+  email: `mailto:${datos.email}`,
+  url: canonical,
+  address: { '@type': 'PostalAddress', addressLocality: 'Freyre', addressRegion: 'Córdoba', addressCountry: 'AR' },
+  alumniOf: 'UTN Facultad Regional San Francisco',
+  sameAs: [datos.linkedin, datos.github],
+});
 ---
 
 <!doctype html>
@@ -24,6 +39,28 @@ const {
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#0A1628" />
+    <meta name="author" content={datos.nombre} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href={withBase('favicon.svg')} />
+    <link rel="apple-touch-icon" href={withBase('apple-touch-icon.png')} />
+    <link rel="sitemap" href={withBase('sitemap-index.xml')} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:site_name" content={datos.nombreCorto} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${datos.nombreCorto} — ${datos.titulo}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script type="application/ld+json" set:html={personaJsonLd} />
     <script is:inline>document.documentElement.classList.add('js');</script>
   </head>
   <body>
