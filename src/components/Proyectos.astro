@@ -1,0 +1,62 @@
+---
+import { getCollection } from 'astro:content';
+import SectionHeader from './SectionHeader.astro';
+import ProyectoCard from './ProyectoCard.astro';
+import Lightbox from './Lightbox.astro';
+
+const proyectos = (await getCollection('proyectos')).sort((a, b) => a.data.orden - b.data.orden);
+---
+
+<section id="proyectos" aria-labelledby="proyectos-titulo" class="py-2xl lg:py-section border-b border-outline/60">
+  <div class="max-w-[1200px] mx-auto px-md lg:px-lg flex flex-col gap-xl">
+    <SectionHeader id="proyectos-titulo" codigo="SELECT * FROM proyectos" titulo="Proyectos" />
+
+    <ul class="grid grid-cols-1 md:grid-cols-2 gap-lg items-start">
+      {
+        proyectos.map((p, i) => (
+          <li>
+            <ProyectoCard proyecto={p} numero={i + 1} />
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<Lightbox />
+
+<script>
+  const reducido = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  document.querySelectorAll<HTMLElement>('[data-proyecto]').forEach((card) => {
+    const detalle = card.querySelector<HTMLElement>('[data-detalle]');
+    const abrir = card.querySelector<HTMLButtonElement>('[data-toggle]:not([data-cerrar])');
+    const cerrar = card.querySelector<HTMLButtonElement>('[data-toggle][data-cerrar]');
+    if (!detalle || !abrir || !cerrar) return;
+
+    detalle.inert = true;
+    detalle.tabIndex = -1;
+
+    const setAbierto = (abierto: boolean) => {
+      detalle.dataset.abierto = String(abierto);
+      abrir.setAttribute('aria-expanded', String(abierto));
+      cerrar.setAttribute('aria-expanded', String(abierto));
+      abrir.hidden = abierto;
+      detalle.inert = !abierto;
+      card.classList.toggle('border-accent/50', abierto);
+    };
+
+    abrir.addEventListener('click', () => {
+      setAbierto(true);
+      detalle.focus({ preventScroll: true });
+    });
+
+    cerrar.addEventListener('click', () => {
+      setAbierto(false);
+      abrir.focus({ preventScroll: true });
+      // Si el inicio de la tarjeta quedó fuera de pantalla, volver a él
+      const top = card.getBoundingClientRect().top;
+      if (top < 0) card.scrollIntoView({ behavior: reducido.matches ? 'auto' : 'smooth', block: 'start' });
+    });
+  });
+</script>

@@ -1,0 +1,103 @@
+---
+import { ChevronLeft, ChevronRight, X } from '@lucide/astro';
+---
+
+<dialog
+  id="lightbox"
+  aria-label="Captura ampliada"
+  class="lightbox m-0 p-0 w-screen h-screen max-w-none max-h-none bg-background/95 backdrop:bg-background/80 text-on-surface"
+>
+  <div class="relative w-full h-full flex flex-col items-center justify-center gap-md p-md lg:p-2xl">
+    <div class="absolute top-md left-md font-mono text-mono-lg text-accent" aria-live="polite">
+      <span data-contador></span>
+    </div>
+    <button
+      type="button"
+      data-cerrar
+      aria-label="Cerrar"
+      class="absolute top-md right-md inline-flex items-center justify-center w-11 h-11 rounded bg-surface border border-outline hover:border-accent transition-colors"
+    >
+      <X class="w-5 h-5" aria-hidden="true" />
+    </button>
+
+    <figure class="flex flex-col items-center gap-md max-w-full max-h-full min-h-0">
+      <img data-imagen alt="" class="max-w-full max-h-[78vh] object-contain rounded-md border border-outline" />
+      <figcaption data-caption class="font-body text-body-md text-on-surface-muted text-center"></figcaption>
+    </figure>
+
+    <button
+      type="button"
+      data-anterior
+      aria-label="Captura anterior"
+      class="absolute left-md top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-11 h-11 rounded bg-surface border border-outline hover:border-accent transition-colors"
+    >
+      <ChevronLeft class="w-5 h-5" aria-hidden="true" />
+    </button>
+    <button
+      type="button"
+      data-siguiente
+      aria-label="Captura siguiente"
+      class="absolute right-md top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-11 h-11 rounded bg-surface border border-outline hover:border-accent transition-colors"
+    >
+      <ChevronRight class="w-5 h-5" aria-hidden="true" />
+    </button>
+  </div>
+</dialog>
+
+<script>
+  type Item = { src: string; alt: string; caption: string };
+
+  const dlg = document.getElementById('lightbox') as HTMLDialogElement | null;
+  if (dlg) {
+    const img = dlg.querySelector<HTMLImageElement>('[data-imagen]')!;
+    const caption = dlg.querySelector<HTMLElement>('[data-caption]')!;
+    const contador = dlg.querySelector<HTMLElement>('[data-contador]')!;
+    const prev = dlg.querySelector<HTMLButtonElement>('[data-anterior]')!;
+    const next = dlg.querySelector<HTMLButtonElement>('[data-siguiente]')!;
+    let items: Item[] = [];
+    let actual = 0;
+    let origen: HTMLElement | null = null;
+
+    const mostrar = (i: number) => {
+      actual = (i + items.length) % items.length;
+      const it = items[actual];
+      img.src = it.src;
+      img.alt = it.alt;
+      caption.textContent = it.caption;
+      caption.hidden = !it.caption;
+      contador.textContent = `${actual + 1} / ${items.length}`;
+      const varias = items.length > 1;
+      prev.hidden = !varias;
+      next.hidden = !varias;
+    };
+
+    document.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-lightbox-item]');
+      if (!btn) return;
+      const galeria = btn.dataset.galeria;
+      const botones = [...document.querySelectorAll<HTMLElement>(`[data-lightbox-item][data-galeria="${galeria}"]`)];
+      items = botones.map((b) => ({ src: b.dataset.src!, alt: b.dataset.alt!, caption: b.dataset.caption ?? '' }));
+      origen = btn;
+      mostrar(Number(btn.dataset.index));
+      document.documentElement.style.overflow = 'hidden';
+      dlg.showModal();
+    });
+
+    prev.addEventListener('click', () => mostrar(actual - 1));
+    next.addEventListener('click', () => mostrar(actual + 1));
+    dlg.querySelector('[data-cerrar]')!.addEventListener('click', () => dlg.close());
+    // Clic en el fondo (fuera de la imagen y los controles) cierra
+    dlg.addEventListener('click', (e) => {
+      const t = e.target as HTMLElement;
+      if (t === dlg || t.parentElement === dlg) dlg.close();
+    });
+    dlg.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') mostrar(actual - 1);
+      if (e.key === 'ArrowRight') mostrar(actual + 1);
+    });
+    dlg.addEventListener('close', () => {
+      document.documentElement.style.overflow = '';
+      origen?.focus();
+    });
+  }
+</script>

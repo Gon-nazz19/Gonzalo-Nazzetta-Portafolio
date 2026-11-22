@@ -1,0 +1,257 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import {
+  BookOpen,
+  ChevronDown,
+  ChevronUp,
+  Code,
+  ExternalLink,
+  FileText,
+  Link as LinkIcon,
+  Plug,
+  Presentation,
+  Video,
+} from '@lucide/astro';
+import { siGithub } from 'simple-icons';
+import SimpleIcon from './SimpleIcon.astro';
+import { seccionesDe } from '../lib/secciones';
+import { dimensiones } from '../lib/imagenes';
+import { withBase } from '../lib/url';
+
+interface Props {
+  proyecto: CollectionEntry<'proyectos'>;
+  numero: number;
+}
+
+const { proyecto, numero } = Astro.props;
+const { id: slug, data, body } = proyecto;
+const n = String(numero).padStart(2, '0');
+const detalleId = `detalle-${slug}`;
+const tituloId = `titulo-${slug}`;
+
+const secciones = seccionesDe(body);
+const imagenes = await Promise.all(
+  data.imagenes.map(async (img) => ({
+    ...img,
+    url: withBase(`proyectos/${slug}/${img.src}`),
+    ...(await dimensiones(slug, img.src)),
+  })),
+);
+const hayDetalle = imagenes.length > 0 || secciones.length > 0 || data.links.length > 0;
+
+const iconosLink = {
+  docs: FileText,
+  repo: Code,
+  paper: BookOpen,
+  demo: ExternalLink,
+  video: Video,
+  presentacion: Presentation,
+  api: Plug,
+  otro: LinkIcon,
+} as const;
+
+const estadoClase =
+  data.estado === 'en producción'
+    ? 'bg-success/15 border-success/40 text-success'
+    : 'bg-accent/10 border-accent/30 text-accent';
+---
+
+<article
+  id={`proyecto-${slug}`}
+  aria-labelledby={tituloId}
+  data-proyecto
+  class="reveal relative overflow-hidden bg-surface border border-accent/20 rounded-lg p-lg flex flex-col gap-md hover:border-accent/50 transition-colors duration-200 scroll-mt-24"
+>
+  <!-- Brillo en la esquina superior derecha -->
+  <span
+    class="pointer-events-none absolute -top-24 -right-24 w-56 h-56 rounded-full bg-[radial-gradient(circle,rgba(79,195,247,0.16),transparent_70%)]"
+    aria-hidden="true"></span>
+
+  <header class="relative flex items-start justify-between gap-md">
+    <div class="flex items-start gap-md min-w-0">
+      <span class="shrink-0 inline-flex items-center justify-center w-10 h-10 rounded bg-background border border-accent/30 font-mono text-mono-lg text-accent" aria-hidden="true">
+        {n}
+      </span>
+      <div class="min-w-0">
+        <h3 id={tituloId} class="font-headline text-title-lg text-on-surface text-balance">{data.titulo}</h3>
+        <p class="font-body text-body-sm text-on-surface-muted">{data.contexto}</p>
+      </div>
+    </div>
+    {
+      data.repo && (
+        <a
+          href={data.repo}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Ver repositorio de ${data.titulo}`}
+          class="shrink-0 inline-flex items-center justify-center w-10 h-10 rounded border border-outline text-on-surface-muted hover:text-accent hover:border-accent transition-colors"
+        >
+          <SimpleIcon icon={siGithub} class="w-5 h-5" />
+        </a>
+      )
+    }
+  </header>
+
+  <div class="relative flex flex-wrap items-center gap-sm">
+    <span class="inline-flex px-sm py-xs rounded bg-primary/15 text-accent font-mono text-label-sm uppercase">{data.rol}</span>
+    <span class="font-mono text-mono-sm text-on-surface-muted">{data.periodo}</span>
+  </div>
+
+  <p class="relative font-body text-body-md text-on-surface-muted text-pretty">{data.resumen}</p>
+
+  {
+    data.tags.length > 0 && (
+      <ul class="relative flex flex-wrap gap-xs" aria-label="Tecnologías">
+        {data.tags.map((t) => (
+          <li class="px-sm py-xs rounded-full bg-surface-elevated border border-accent/25 text-accent font-mono text-label-sm">{t}</li>
+        ))}
+      </ul>
+    )
+  }
+
+  {
+    data.estado && (
+      <p class="relative">
+        <span class={`inline-flex items-center px-md py-xs rounded-full border font-mono text-mono-sm ${estadoClase}`}>
+          <span class="sr-only">Estado: </span>
+          {data.estado}
+        </span>
+      </p>
+    )
+  }
+
+  {
+    hayDetalle && (
+      <>
+        <button
+          type="button"
+          data-toggle
+          aria-expanded="false"
+          aria-controls={detalleId}
+          class="relative mt-auto hidden [.js_&]:inline-flex w-full items-center justify-center gap-sm px-lg py-sm rounded border border-accent/30 bg-background/60 text-on-surface font-label text-label-lg hover:border-accent hover:bg-surface-elevated transition-colors"
+        >
+          Ver detalles
+          <ChevronDown class="w-4 h-4 text-accent" aria-hidden="true" />
+          <span class="sr-only">de {data.titulo}</span>
+        </button>
+
+        <div id={detalleId} data-detalle class="detalle relative" role="region" aria-labelledby={tituloId}>
+          <div class="overflow-hidden">
+            <div class="flex flex-col gap-xl pt-md border-t border-outline">
+              {imagenes.length > 0 && (
+                <section class="flex flex-col gap-md">
+                  <h4 class="font-mono text-mono-sm text-accent uppercase tracking-wide">— Capturas del sistema</h4>
+                  <ul class="grid grid-cols-1 sm:grid-cols-3 gap-md">
+                    {imagenes.map((img, i) => (
+                      <li>
+                        <figure class="flex flex-col gap-xs">
+                          <button
+                            type="button"
+                            data-lightbox-item
+                            data-galeria={slug}
+                            data-index={i}
+                            data-src={img.url}
+                            data-alt={img.alt}
+                            data-caption={img.caption ?? ''}
+                            aria-label={`Ampliar captura: ${img.alt}`}
+                            class="block w-full overflow-hidden rounded-md border border-outline hover:border-accent transition-colors"
+                          >
+                            <Image
+                              src={img.url}
+                              alt={img.alt}
+                              width={img.width}
+                              height={img.height}
+                              loading="lazy"
+                              decoding="async"
+                              class="w-full aspect-video object-cover"
+                            />
+                          </button>
+                          {img.caption && <figcaption class="font-body text-body-sm text-on-surface-muted">{img.caption}</figcaption>}
+                        </figure>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+
+              {secciones.map((s) => (
+                <section class="flex flex-col gap-sm">
+                  <h4 class="font-mono text-mono-sm text-accent uppercase tracking-wide">— {s.titulo}</h4>
+                  <div class="prosa lista-triangulo font-body text-body-md text-on-surface-muted" set:html={s.html} />
+                </section>
+              ))}
+
+              {data.links.length > 0 && (
+                <ul class="flex flex-wrap gap-md">
+                  {data.links.map((l, i) => {
+                    const Icono = iconosLink[l.tipo];
+                    return (
+                      <li>
+                        <a
+                          href={l.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class:list={[
+                            'inline-flex items-center gap-sm px-lg py-sm rounded font-label text-label-lg transition-colors whitespace-nowrap',
+                            i === 0
+                              ? 'bg-linear-to-r from-primary to-accent text-on-primary hover:opacity-95'
+                              : 'border border-accent/30 text-on-surface hover:border-accent hover:bg-surface-elevated',
+                          ]}
+                        >
+                          {l.tipo === 'repo' ? <SimpleIcon icon={siGithub} class="w-4 h-4" /> : <Icono class="w-4 h-4" aria-hidden="true" />}
+                          {l.label}
+                          <span class="sr-only">(se abre en una pestaña nueva)</span>
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+
+              <button
+                type="button"
+                data-toggle
+                data-cerrar
+                aria-expanded="true"
+                aria-controls={detalleId}
+                class="hidden [.js_&]:inline-flex w-full items-center justify-center gap-sm px-lg py-sm rounded border border-outline text-on-surface-muted font-label text-label-lg hover:border-accent hover:text-on-surface transition-colors"
+              >
+                Ver menos
+                <ChevronUp class="w-4 h-4 text-accent" aria-hidden="true" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </>
+    )
+  }
+</article>
+
+<style>
+  /* Transición de altura con grid 0fr → 1fr. Sin JS, el detalle queda visible. */
+  :global(.js) .detalle {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 350ms cubic-bezier(0.2, 0, 0, 1);
+  }
+  :global(.js) .detalle[data-abierto='true'] {
+    grid-template-rows: 1fr;
+  }
+  :global(.js) .detalle > div {
+    min-height: 0;
+  }
+  .prosa :global(ul) {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .prosa :global(p + p) {
+    margin-top: 8px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .detalle {
+      transition: none;
+    }
+  }
+</style>
