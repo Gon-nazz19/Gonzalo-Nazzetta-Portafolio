@@ -12,6 +12,7 @@ tanto, el elemento correspondiente no se muestra (no inventar datos).
 - **Bajada:** Estudiante de 5.° año de Ingeniería en Sistemas de Información – UTN Facultad Regional San Francisco
 - **Ubicación:** Freyre, Córdoba, Argentina
 - **Email:** nazzettagonzalo@gmail.com
+- **WhatsApp:** +54 9 3564 68-3232 (https://wa.me/5493564683232)
 - **LinkedIn:** https://www.linkedin.com/in/gonzalo-nazzetta-b58430222
 - **GitHub:** https://github.com/Gon-nazz19
 - **CV descargable:** `/cv/CV_Gonzalo_Nazzetta.pdf`

@@ -9,6 +9,8 @@ export const datos = {
     'Estudiante de 5.° año de Ingeniería en Sistemas de Información – UTN Facultad Regional San Francisco',
   ubicacion: 'Freyre, Córdoba, Argentina',
   email: 'nazzettagonzalo@gmail.com',
+  // wa.me: código de país + 9 + característica sin 0 + número sin 15
+  whatsapp: { numero: '5493564683232', visible: '+54 9 3564 68-3232' },
   linkedin: 'https://www.linkedin.com/in/gonzalo-nazzetta-b58430222',
   github: 'https://github.com/Gon-nazz19',
   cv: 'cv/CV_Gonzalo_Nazzetta.pdf',
