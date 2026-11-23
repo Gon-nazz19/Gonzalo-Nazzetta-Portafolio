@@ -1,73 +1,292 @@
 ---
-import { Briefcase, Download, Mail } from '@lucide/astro';
+// "Trabajemos juntos": formulario que hace POST (JSON) a PUBLIC_CONTACT_ENDPOINT
+// (Formspree, Web3Forms o un endpoint propio). Si la variable no está definida,
+// el botón abre un mailto con los datos precargados: nunca finge que envía.
+import { Briefcase, Download, Mail, Send } from '@lucide/astro';
 import { siGithub } from 'simple-icons';
 import SectionHeader from './SectionHeader.astro';
 import SimpleIcon from './SimpleIcon.astro';
 import { datos } from '../data/perfil';
 import { withBase } from '../lib/url';
 
+const endpoint = (import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? '').trim();
+const accessKey = (import.meta.env.PUBLIC_CONTACT_ACCESS_KEY ?? '').trim();
+const conEndpoint = endpoint.length > 0;
+
 const usuarioGithub = datos.github.replace('https://', '');
 const usuarioLinkedin = datos.linkedin.replace(/^https:\/\/www\.linkedin\.com/, '');
+
+const accesos = [
+  { href: `mailto:${datos.email}`, titulo: 'Correo electrónico', detalle: datos.email, icono: 'mail', externo: false },
+  { href: datos.linkedin, titulo: 'LinkedIn', detalle: usuarioLinkedin, icono: 'linkedin', externo: true },
+  { href: datos.github, titulo: 'GitHub', detalle: usuarioGithub, icono: 'github', externo: true },
+];
+
+const input =
+  'w-full bg-background border border-outline rounded px-md py-sm text-body-md text-on-surface placeholder:text-on-surface-muted/70 transition-colors duration-200 hover:border-accent/40 focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/30 aria-[invalid=true]:border-red-300';
+const label = 'font-label text-label-lg text-on-surface';
+const error = 'font-label text-body-sm text-red-300 hidden';
 ---
 
 <section id="contacto" aria-labelledby="contacto-titulo" class="py-2xl lg:py-section">
   <div class="max-w-[1200px] mx-auto px-md lg:px-lg flex flex-col gap-xl">
-    <SectionHeader id="contacto-titulo" codigo="contacto.sh" titulo="Contacto" />
+    <div class="flex flex-col gap-sm">
+      <SectionHeader id="contacto-titulo" codigo="contacto.sh" titulo="Trabajemos juntos" />
+      <p class="text-body-lg text-on-surface-muted">Contame en qué estás trabajando y te respondo a la brevedad.</p>
+    </div>
 
-    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-lg">
-      <li>
-        <a
-          href={`mailto:${datos.email}`}
-          class="fx-card fx-tilt h-full bg-surface border border-accent/20 rounded-lg p-lg flex items-center gap-md hover:border-accent hover:bg-surface-elevated transition-colors duration-200"
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+      <!-- Accesos directos -->
+      <ul class="lg:col-span-5 flex flex-col gap-md" aria-label="Contacto directo">
+        {
+          accesos.map((a) => (
+            <li>
+              <a
+                href={a.href}
+                {...(a.externo ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                class="fx-card fx-tilt h-full bg-surface border border-accent/20 rounded-lg p-lg flex items-center gap-md hover:border-accent hover:bg-surface-elevated transition-colors duration-200"
+              >
+                {a.icono === 'mail' && <Mail class="w-6 h-6 shrink-0 text-accent" aria-hidden="true" />}
+                {a.icono === 'linkedin' && <Briefcase class="w-6 h-6 shrink-0 text-accent" aria-hidden="true" />}
+                {a.icono === 'github' && <SimpleIcon icon={siGithub} class="w-6 h-6 shrink-0 text-accent" />}
+                <span class="min-w-0">
+                  <span class="font-label text-title-md text-on-surface block">
+                    {a.titulo}
+                    {a.externo && <span class="sr-only">(se abre en una pestaña nueva)</span>}
+                  </span>
+                  <span class="font-mono text-mono-sm text-accent break-all">{a.detalle}</span>
+                </span>
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a
+            href={withBase(datos.cv)}
+            download
+            class="fx-card fx-tilt h-full bg-linear-to-br from-primary/25 to-surface border border-accent/40 rounded-lg p-lg flex items-center gap-md hover:border-accent transition-colors duration-200"
+          >
+            <Download class="w-6 h-6 shrink-0 text-accent" aria-hidden="true" />
+            <span class="min-w-0">
+              <span class="font-label text-title-md text-on-surface block">Descargar CV</span>
+              <span class="font-mono text-mono-sm text-accent">PDF</span>
+            </span>
+          </a>
+        </li>
+      </ul>
+
+      <!-- Formulario -->
+      <div class="lg:col-span-7 fx-card bg-surface border border-accent/30 rounded-lg p-lg lg:p-xl">
+        <form
+          id="form-contacto"
+          class="flex flex-col gap-lg"
+          data-endpoint={endpoint}
+          data-access-key={accessKey}
+          data-email={datos.email}
+          {...conEndpoint
+            ? { action: endpoint, method: 'post' }
+            : { action: `mailto:${datos.email}`, method: 'post', enctype: 'text/plain' }}
         >
-          <Mail class="w-6 h-6 shrink-0 text-accent" aria-hidden="true" />
-          <span class="min-w-0">
-            <span class="font-label text-title-md text-on-surface block">Correo electrónico</span>
-            <span class="font-mono text-mono-sm text-accent break-all">{datos.email}</span>
-          </span>
-        </a>
-      </li>
-      <li>
-        <a
-          href={datos.linkedin}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="fx-card fx-tilt h-full bg-surface border border-accent/20 rounded-lg p-lg flex items-center gap-md hover:border-accent hover:bg-surface-elevated transition-colors duration-200"
-        >
-          <Briefcase class="w-6 h-6 shrink-0 text-accent" aria-hidden="true" />
-          <span class="min-w-0">
-            <span class="font-label text-title-md text-on-surface block">LinkedIn <span class="sr-only">(se abre en una pestaña nueva)</span></span>
-            <span class="font-mono text-mono-sm text-accent break-all">{usuarioLinkedin}</span>
-          </span>
-        </a>
-      </li>
-      <li>
-        <a
-          href={datos.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="fx-card fx-tilt h-full bg-surface border border-accent/20 rounded-lg p-lg flex items-center gap-md hover:border-accent hover:bg-surface-elevated transition-colors duration-200"
-        >
-          <SimpleIcon icon={siGithub} class="w-6 h-6 shrink-0 text-accent" />
-          <span class="min-w-0">
-            <span class="font-label text-title-md text-on-surface block">GitHub <span class="sr-only">(se abre en una pestaña nueva)</span></span>
-            <span class="font-mono text-mono-sm text-accent break-all">{usuarioGithub}</span>
-          </span>
-        </a>
-      </li>
-      <li>
-        <a
-          href={withBase(datos.cv)}
-          download
-          class="fx-card fx-tilt h-full bg-linear-to-br from-primary/25 to-surface border border-accent/40 rounded-lg p-lg flex items-center gap-md hover:border-accent transition-colors duration-200"
-        >
-          <Download class="w-6 h-6 shrink-0 text-accent" aria-hidden="true" />
-          <span class="min-w-0">
-            <span class="font-label text-title-md text-on-surface block">Descargar CV</span>
-            <span class="font-mono text-mono-sm text-accent">PDF</span>
-          </span>
-        </a>
-      </li>
-    </ul>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-lg">
+            <div class="flex flex-col gap-xs">
+              <label for="cf-nombre" class={label}>Nombre <span class="text-accent" aria-hidden="true">*</span></label>
+              <input id="cf-nombre" name="nombre" type="text" autocomplete="name" required maxlength="100" aria-describedby="cf-nombre-error" class={input} />
+              <p id="cf-nombre-error" class={error}></p>
+            </div>
+            <div class="flex flex-col gap-xs">
+              <label for="cf-celular" class={label}>Celular <span class="font-body font-normal text-on-surface-muted">(opcional)</span></label>
+              <input
+                id="cf-celular"
+                name="celular"
+                type="tel"
+                inputmode="tel"
+                autocomplete="tel"
+                maxlength="25"
+                placeholder="+54 9 351 123-4567"
+                aria-describedby="cf-celular-ayuda cf-celular-error"
+                class={input}
+              />
+              <p id="cf-celular-ayuda" class="sr-only">Formato argentino, por ejemplo +54 9 351 123-4567 o 0351 15 123-4567.</p>
+              <p id="cf-celular-error" class={error}></p>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-xs">
+            <label for="cf-email" class={label}>Email <span class="text-accent" aria-hidden="true">*</span></label>
+            <input id="cf-email" name="email" type="email" autocomplete="email" required maxlength="150" aria-describedby="cf-email-error" class={input} />
+            <p id="cf-email-error" class={error}></p>
+          </div>
+
+          <div class="flex flex-col gap-xs">
+            <label for="cf-mensaje" class={label}>Mensaje <span class="text-accent" aria-hidden="true">*</span></label>
+            <textarea id="cf-mensaje" name="mensaje" rows="5" required maxlength="4000" aria-describedby="cf-mensaje-error" class:list={[input, 'resize-y min-h-32']}></textarea>
+            <p id="cf-mensaje-error" class={error}></p>
+          </div>
+
+          <!-- Honeypot anti-spam: invisible para personas, los bots suelen completarlo -->
+          <div class="absolute -left-[9999px] w-px h-px overflow-hidden" aria-hidden="true">
+            <label for="cf-web">No completar este campo</label>
+            <input id="cf-web" name="sitio_web" type="text" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center gap-md">
+            <button
+              type="submit"
+              class="inline-flex items-center justify-center gap-sm px-lg py-md rounded bg-linear-to-r from-primary to-accent text-on-primary font-label text-label-lg shadow-lg hover:opacity-95 transition-opacity duration-200 disabled:opacity-60 disabled:cursor-wait whitespace-nowrap shrink-0"
+            >
+              {conEndpoint ? <Send class="w-4 h-4" aria-hidden="true" /> : <Mail class="w-4 h-4" aria-hidden="true" />}
+              <span data-texto>{conEndpoint ? 'Enviar mensaje' : 'Enviar por correo'}</span>
+            </button>
+            {
+              !conEndpoint && (
+                <p class="text-body-sm text-on-surface-muted">Se abre tu aplicación de correo con el mensaje listo para enviar.</p>
+              )
+            }
+          </div>
+
+          <p id="cf-estado" role="status" aria-live="polite" class="text-body-md empty:hidden"></p>
+        </form>
+      </div>
+    </div>
   </div>
 </section>
+
+<script>
+  const form = document.getElementById('form-contacto') as HTMLFormElement | null;
+
+  if (form) {
+    form.noValidate = true; // validación propia, con mensajes en español
+    const endpoint = form.dataset.endpoint ?? '';
+    const accessKey = form.dataset.accessKey ?? '';
+    const destino = form.dataset.email ?? '';
+    const boton = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    const textoBoton = boton.querySelector<HTMLElement>('[data-texto]')!;
+    const textoOriginal = textoBoton.textContent ?? '';
+    const estado = document.getElementById('cf-estado')!;
+
+    const campo = (n: string) => form.elements.namedItem(n) as HTMLInputElement | HTMLTextAreaElement;
+    const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+    // Celular argentino: acepta +54 9 351 123-4567, 0351 15 123-4567, 351 1234567…
+    function celularValido(v: string) {
+      if (!/^[\d\s()+.-]+$/.test(v)) return false;
+      let d = v.replace(/\D/g, '');
+      if (d.startsWith('54')) {
+        d = d.slice(2);
+        if (d.startsWith('9')) d = d.slice(1);
+      }
+      if (d.startsWith('0')) d = d.slice(1);
+      if (d.length === 12) d = d.replace(/^(\d{2,4})15(\d{6,8})$/, '$1$2'); // quita el 15
+      return d.length === 10;
+    }
+
+    const reglas: Record<string, (v: string) => string> = {
+      nombre: (v) => (v.length < 2 ? 'Ingresá tu nombre.' : ''),
+      celular: (v) => (v && !celularValido(v) ? 'Revisá el celular: usá un formato como +54 9 351 123-4567.' : ''),
+      email: (v) => (!v ? 'Ingresá tu email.' : !EMAIL.test(v) ? 'Ingresá un email válido, por ejemplo nombre@dominio.com.' : ''),
+      mensaje: (v) => (v.length < 10 ? 'Contame un poco más (al menos 10 caracteres).' : ''),
+    };
+
+    function validar(nombre: string) {
+      const el = campo(nombre);
+      const msg = reglas[nombre](el.value.trim());
+      const err = document.getElementById(`cf-${nombre}-error`)!;
+      err.textContent = msg;
+      err.classList.toggle('hidden', !msg);
+      if (msg) el.setAttribute('aria-invalid', 'true');
+      else el.removeAttribute('aria-invalid');
+      return !msg;
+    }
+
+    // Revalida al salir del campo y, si ya tenía error, mientras se corrige
+    for (const n of Object.keys(reglas)) {
+      const el = campo(n);
+      el.addEventListener('blur', () => el.value && validar(n));
+      el.addEventListener('input', () => el.getAttribute('aria-invalid') === 'true' && validar(n));
+    }
+
+    function mostrar(tipo: 'ok' | 'error' | 'info', texto: string) {
+      estado.textContent = texto;
+      estado.className = `text-body-md empty:hidden ${tipo === 'ok' ? 'text-success' : tipo === 'error' ? 'text-red-300' : 'text-on-surface-muted'}`;
+    }
+
+    function enviando(si: boolean) {
+      boton.disabled = si;
+      boton.setAttribute('aria-busy', String(si));
+      textoBoton.textContent = si ? 'Enviando…' : textoOriginal;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      mostrar('info', '');
+      const invalidos = Object.keys(reglas).filter((n) => !validar(n));
+      if (invalidos.length) {
+        campo(invalidos[0]).focus();
+        mostrar('error', 'Revisá los campos marcados.');
+        return;
+      }
+
+      const valores = {
+        nombre: campo('nombre').value.trim(),
+        celular: campo('celular').value.trim(),
+        email: campo('email').value.trim(),
+        mensaje: campo('mensaje').value.trim(),
+      };
+      const asunto = `Contacto desde el portafolio: ${valores.nombre}`;
+
+      // Honeypot completo → probablemente un bot: no se envía nada
+      if (campo('sitio_web').value) {
+        form.reset();
+        mostrar('ok', 'Gracias, recibí tu mensaje.');
+        return;
+      }
+
+      // Sin endpoint configurado: abrir el cliente de correo con todo precargado
+      if (!endpoint) {
+        const cuerpo = [
+          `Nombre: ${valores.nombre}`,
+          ...(valores.celular ? [`Celular: ${valores.celular}`] : []),
+          `Email: ${valores.email}`,
+          '',
+          valores.mensaje,
+        ].join('\n');
+        window.location.href = `mailto:${destino}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`;
+        mostrar('info', 'Se abrió tu aplicación de correo con el mensaje listo. Si no se abrió, escribime a ' + destino + '.');
+        return;
+      }
+
+      // Con endpoint: POST JSON compatible con Formspree, Web3Forms y endpoints propios
+      const payload: Record<string, string> = {
+        name: valores.nombre,
+        email: valores.email,
+        message: valores.mensaje,
+        subject: asunto,
+        _subject: asunto, // Formspree
+        from_name: 'Portafolio Gonzalo Nazzetta', // Web3Forms
+      };
+      if (valores.celular) payload.phone = valores.celular;
+      if (accessKey) payload.access_key = accessKey; // Web3Forms
+
+      enviando(true);
+      const control = new AbortController();
+      const corte = setTimeout(() => control.abort(), 15000);
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(payload),
+          signal: control.signal,
+        });
+        const datos = await res.json().catch(() => ({}));
+        if (!res.ok || datos?.success === false || datos?.ok === false) throw new Error(String(res.status));
+        form.reset();
+        mostrar('ok', '¡Listo! Recibí tu mensaje y te respondo a la brevedad.');
+      } catch {
+        mostrar('error', `No se pudo enviar el mensaje. Probá de nuevo en unos minutos o escribime a ${destino}.`);
+      } finally {
+        clearTimeout(corte);
+        enviando(false);
+      }
+    });
+  }
+</script>

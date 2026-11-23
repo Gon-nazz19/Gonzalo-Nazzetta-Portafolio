@@ -24,6 +24,11 @@ jobs:
         uses: withastro/action@v6
         with:
           node-version: 24
+        env:
+          # Variables del repo (Settings → Secrets and variables → Actions → Variables).
+          # Si no existen, el formulario muestra el botón mailto.
+          PUBLIC_CONTACT_ENDPOINT: ${{ vars.PUBLIC_CONTACT_ENDPOINT }}
+          PUBLIC_CONTACT_ACCESS_KEY: ${{ vars.PUBLIC_CONTACT_ACCESS_KEY }}
 
   deploy:
     needs: build
