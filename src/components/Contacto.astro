@@ -14,7 +14,6 @@ const accessKey = (import.meta.env.PUBLIC_CONTACT_ACCESS_KEY ?? '').trim();
 const conEndpoint = endpoint.length > 0;
 
 const usuarioGithub = datos.github.replace('https://', '');
-const usuarioLinkedin = datos.linkedin.replace(/^https:\/\/www\.linkedin\.com/, '');
 
 const accesos = [
   { href: `mailto:${datos.email}`, titulo: 'Correo electrónico', detalle: datos.email, icono: 'mail', externo: false },
@@ -25,7 +24,7 @@ const accesos = [
     icono: 'whatsapp',
     externo: true,
   },
-  { href: datos.linkedin, titulo: 'LinkedIn', detalle: usuarioLinkedin, icono: 'linkedin', externo: true },
+  { href: datos.linkedin, titulo: 'LinkedIn', detalle: '', icono: 'linkedin', externo: true },
   { href: datos.github, titulo: 'GitHub', detalle: usuarioGithub, icono: 'github', externo: true },
 ];
 
@@ -51,7 +50,7 @@ const error = 'font-label text-body-sm text-red-300 hidden';
               <a
                 href={a.href}
                 {...(a.externo ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                class="fx-card fx-tilt h-full bg-surface border border-accent/20 rounded-lg p-lg flex items-center gap-md hover:border-accent hover:bg-surface-elevated transition-colors duration-200"
+                class="fx-card fx-tilt h-full min-h-24 bg-surface border border-accent/20 rounded-lg p-lg flex items-center gap-md hover:border-accent hover:bg-surface-elevated transition-colors duration-200"
               >
                 {a.icono === 'mail' && <Mail class="w-6 h-6 shrink-0 text-accent" aria-hidden="true" />}
                 {a.icono === 'linkedin' && <Briefcase class="w-6 h-6 shrink-0 text-accent" aria-hidden="true" />}
@@ -62,7 +61,7 @@ const error = 'font-label text-body-sm text-red-300 hidden';
                     {a.titulo}
                     {a.externo && <span class="sr-only">(se abre en una pestaña nueva)</span>}
                   </span>
-                  <span class="font-mono text-mono-sm text-accent break-all">{a.detalle}</span>
+                  {a.detalle && <span class="font-mono text-mono-sm text-accent break-all">{a.detalle}</span>}
                 </span>
               </a>
             </li>
@@ -72,7 +71,7 @@ const error = 'font-label text-body-sm text-red-300 hidden';
           <a
             href={withBase(datos.cv)}
             download
-            class="fx-card fx-tilt h-full bg-linear-to-br from-primary/25 to-surface border border-accent/40 rounded-lg p-lg flex items-center gap-md hover:border-accent transition-colors duration-200"
+            class="fx-card fx-tilt h-full min-h-24 bg-linear-to-br from-primary/25 to-surface border border-accent/40 rounded-lg p-lg flex items-center gap-md hover:border-accent transition-colors duration-200"
           >
             <Download class="w-6 h-6 shrink-0 text-accent" aria-hidden="true" />
             <span class="min-w-0">
