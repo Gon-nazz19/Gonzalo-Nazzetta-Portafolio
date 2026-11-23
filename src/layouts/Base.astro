@@ -5,6 +5,7 @@ import '@fontsource-variable/jetbrains-mono';
 import '../styles/global.css';
 import { datos } from '../data/perfil';
 import { withBase } from '../lib/url';
+import FondoTopografico from '../components/FondoTopografico.astro';
 
 interface Props {
   title?: string;
@@ -70,10 +71,12 @@ const personaJsonLd = JSON.stringify({
     >
       Saltar al contenido
     </a>
+    <FondoTopografico />
     <div class="min-h-screen flex flex-col topo-bg relative overflow-x-clip">
       <slot />
     </div>
     <script>
+      import '../scripts/efectos';
       const els = document.querySelectorAll('.reveal');
       if ('IntersectionObserver' in window) {
         const io = new IntersectionObserver(

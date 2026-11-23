@@ -1,0 +1,169 @@
+---
+// Curvas de nivel interactivas (motivo scout). Un campo de alturas que deriva
+// lentamente; el cursor levanta un "cerro" y las curvas se acomodan alrededor.
+// Isolíneas con marching squares. Sin JS queda el fondo estático .topo-bg.
+---
+
+<canvas id="fondo-topo" class="fixed inset-0 -z-10 w-full h-full pointer-events-none" aria-hidden="true"></canvas>
+
+<script>
+  const canvas = document.getElementById('fondo-topo') as HTMLCanvasElement;
+  const ctx = canvas.getContext('2d');
+  const reducido = matchMedia('(prefers-reduced-motion: reduce)');
+
+  if (ctx) {
+    document.documentElement.classList.add('fondo-activo');
+
+    const CELDA = 18; // px por celda de la grilla
+    const PASO = 0.42; // separación entre curvas
+    const SIGMA = 150; // radio del cerro del cursor
+    const ALTURA = 2.6; // altura del cerro
+
+    let w = 0, h = 0, cols = 0, filas = 0;
+    let campo = new Float32Array(0);
+    // mouse: objetivo (t*) y suavizado
+    let tx = -9999, ty = -9999, mx = -9999, my = -9999;
+    let amp = 0, ampObjetivo = 0;
+    let t = 0, previo = 0, corriendo = false;
+
+    function dimensionar() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = window.innerWidth;
+      h = window.innerHeight;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+      cols = Math.ceil(w / CELDA) + 1;
+      filas = Math.ceil(h / CELDA) + 1;
+      campo = new Float32Array(cols * filas);
+    }
+
+    function altura(x: number, y: number, oy: number) {
+      const Y = y + oy;
+      let v =
+        Math.sin(x * 0.0042 + t * 0.06) +
+        Math.sin(Y * 0.0051 - t * 0.045 + x * 0.0018) +
+        0.8 * Math.sin((x + Y) * 0.0029 + t * 0.03) +
+        0.7 * Math.cos(x * 0.0021 - Y * 0.0036);
+      if (amp > 0.001) {
+        const dx = x - mx, dy = y - my;
+        v += amp * ALTURA * Math.exp(-(dx * dx + dy * dy) / (2 * SIGMA * SIGMA));
+      }
+      return v;
+    }
+
+    function dibujar() {
+      const oy = reducido.matches ? 0 : window.scrollY * 0.25;
+      let min = Infinity, max = -Infinity;
+      for (let j = 0; j < filas; j++) {
+        for (let i = 0; i < cols; i++) {
+          const v = altura(i * CELDA, j * CELDA, oy);
+          campo[j * cols + i] = v;
+          if (v < min) min = v;
+          if (v > max) max = v;
+        }
+      }
+
+      const finas = new Path2D();
+      const maestras = new Path2D();
+      const nMin = Math.ceil(min / PASO), nMax = Math.floor(max / PASO);
+      const pts: number[] = [];
+
+      for (let j = 0; j < filas - 1; j++) {
+        for (let i = 0; i < cols - 1; i++) {
+          const a = campo[j * cols + i], b = campo[j * cols + i + 1];
+          const c = campo[(j + 1) * cols + i + 1], d = campo[(j + 1) * cols + i];
+          const lo = Math.min(a, b, c, d), hi = Math.max(a, b, c, d);
+          const x0 = i * CELDA, y0 = j * CELDA;
+          for (let n = Math.max(nMin, Math.ceil(lo / PASO)); n <= Math.min(nMax, Math.floor(hi / PASO)); n++) {
+            const L = n * PASO;
+            pts.length = 0;
+            // bordes: arriba (a-b), derecha (b-c), abajo (d-c), izquierda (a-d)
+            if ((a > L) !== (b > L)) pts.push(x0 + ((L - a) / (b - a)) * CELDA, y0);
+            if ((b > L) !== (c > L)) pts.push(x0 + CELDA, y0 + ((L - b) / (c - b)) * CELDA);
+            if ((d > L) !== (c > L)) pts.push(x0 + ((L - d) / (c - d)) * CELDA, y0 + CELDA);
+            if ((a > L) !== (d > L)) pts.push(x0, y0 + ((L - a) / (d - a)) * CELDA);
+            if (pts.length < 4) continue;
+            const p = n % 5 === 0 ? maestras : finas;
+            p.moveTo(pts[0], pts[1]);
+            p.lineTo(pts[2], pts[3]);
+            if (pts.length === 8) {
+              p.moveTo(pts[4], pts[5]);
+              p.lineTo(pts[6], pts[7]);
+            }
+          }
+        }
+      }
+
+      ctx!.clearRect(0, 0, w, h);
+      const trazo = (alfaBase: number, alfaFoco: number) => {
+        if (amp < 0.01) return `rgba(79,195,247,${alfaBase})`;
+        const g = ctx!.createRadialGradient(mx, my, 0, mx, my, SIGMA * 2.4);
+        g.addColorStop(0, `rgba(79,195,247,${alfaBase + alfaFoco * amp})`);
+        g.addColorStop(1, `rgba(79,195,247,${alfaBase})`);
+        return g;
+      };
+      ctx!.lineWidth = 1;
+      ctx!.strokeStyle = trazo(0.06, 0.3);
+      ctx!.stroke(finas);
+      ctx!.lineWidth = 1.4;
+      ctx!.strokeStyle = trazo(0.11, 0.45);
+      ctx!.stroke(maestras);
+    }
+
+    function cuadro(ahora: number) {
+      const dt = previo ? Math.min((ahora - previo) / 1000, 0.1) : 0;
+      previo = ahora;
+      t += dt;
+      const k = 1 - Math.pow(0.001, dt); // suavizado independiente del framerate
+      if (mx < -9000) { mx = tx; my = ty; }
+      mx += (tx - mx) * k;
+      my += (ty - my) * k;
+      amp += (ampObjetivo - amp) * k * 0.8;
+      dibujar();
+      if (corriendo) requestAnimationFrame(cuadro);
+    }
+
+    function iniciar() {
+      if (corriendo || reducido.matches || document.hidden) return;
+      corriendo = true;
+      previo = 0;
+      requestAnimationFrame(cuadro);
+    }
+    function detener() {
+      corriendo = false;
+    }
+
+    dimensionar();
+    dibujar();
+
+    window.addEventListener('resize', () => {
+      dimensionar();
+      dibujar();
+    });
+    window.addEventListener(
+      'pointermove',
+      (e) => {
+        if (e.pointerType !== 'mouse') return;
+        tx = e.clientX;
+        ty = e.clientY;
+        ampObjetivo = 1;
+      },
+      { passive: true },
+    );
+    document.documentElement.addEventListener('mouseleave', () => (ampObjetivo = 0));
+    document.addEventListener('visibilitychange', () => (document.hidden ? detener() : iniciar()));
+    reducido.addEventListener('change', () => {
+      if (reducido.matches) {
+        detener();
+        amp = ampObjetivo = 0;
+        dibujar();
+      } else iniciar();
+    });
+
+    // Arranca cuando el navegador está libre, para no competir con la carga
+    const arrancar = () => iniciar();
+    if ('requestIdleCallback' in window) requestIdleCallback(arrancar, { timeout: 1500 });
+    else setTimeout(arrancar, 600);
+  }
+</script>

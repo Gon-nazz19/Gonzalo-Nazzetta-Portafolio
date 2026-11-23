@@ -157,3 +157,61 @@
     transform: none;
   }
 }
+
+/* Con JS, las curvas de nivel las dibuja el canvas interactivo (FondoTopografico) */
+.js.fondo-activo .topo-bg {
+  background-image: none;
+}
+
+/* Tarjetas que reaccionan al mouse: brillo que sigue al cursor + borde iluminado.
+   --mx / --my los actualiza src/scripts/efectos.ts */
+.fx-card {
+  position: relative;
+  isolation: isolate;
+}
+.fx-card::before,
+.fx-card::after {
+  content: '';
+  position: absolute;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 300ms var(--ease-card);
+}
+.fx-card::before {
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgb(79 195 247 / 0.11), transparent 45%);
+}
+.fx-card::after {
+  inset: 0;
+  padding: 1px;
+  background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 50%), rgb(79 195 247 / 0.9), transparent 65%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+@media (hover: hover) and (pointer: fine) {
+  .fx-card:hover::before,
+  .fx-card:hover::after {
+    opacity: 1;
+  }
+}
+
+/* Inclinación 3D para tarjetas chicas (--rx / --ry / --lift desde JS) */
+.js .fx-tilt.is-visible,
+.js .fx-tilt:not(.reveal) {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0px));
+  transition:
+    transform 220ms var(--ease-card),
+    opacity 500ms var(--ease-card),
+    border-color 200ms,
+    background-color 200ms,
+    box-shadow 300ms;
+  will-change: transform;
+}
+.js .fx-tilt.inclinada {
+  box-shadow: 0 18px 40px -18px rgb(30 111 255 / 0.45);
+}

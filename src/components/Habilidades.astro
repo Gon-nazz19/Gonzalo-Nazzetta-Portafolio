@@ -36,7 +36,7 @@ const logos = destacados.map((d) => {
       {
         logos.map((l) => (
           <li
-            class="group reveal flex flex-col items-center justify-center gap-xs p-md rounded bg-surface border border-outline hover:border-accent/50 transition-colors duration-200"
+            class="group reveal fx-card fx-tilt flex flex-col items-center justify-center gap-xs p-md rounded bg-surface border border-outline hover:border-accent/50 transition-colors duration-200"
             style={`--marca:${l.hover}`}
           >
             {l.icono && (
@@ -55,7 +55,7 @@ const logos = destacados.map((d) => {
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg">
       {
         categorias.map((c) => (
-          <section class="reveal bg-surface border border-accent/20 rounded-lg p-lg flex flex-col gap-md" aria-label={c.nombre}>
+          <section class="reveal fx-card fx-tilt bg-surface border border-accent/20 rounded-lg p-lg flex flex-col gap-md" aria-label={c.nombre}>
             <h3 class="flex items-center justify-between gap-sm font-mono text-mono-lg text-accent uppercase">
               {c.nombre}
               <span class="inline-flex items-center justify-center min-w-7 h-6 px-sm rounded-full bg-primary/15 border border-accent/25 font-mono text-label-sm text-accent">
@@ -72,7 +72,7 @@ const logos = destacados.map((d) => {
         ))
       }
 
-      <section class="reveal md:col-span-2 bg-surface border border-accent/30 rounded-lg p-lg flex flex-col gap-md" aria-label="Metodologías y conceptos">
+      <section class="reveal fx-card md:col-span-2 bg-surface border border-accent/30 rounded-lg p-lg flex flex-col gap-md" aria-label="Metodologías y conceptos">
         <h3 class="flex items-center justify-between gap-sm font-mono text-mono-lg text-accent uppercase">
           Metodologías y conceptos
           <span class="inline-flex items-center justify-center min-w-7 h-6 px-sm rounded-full bg-primary/15 border border-accent/25 font-mono text-label-sm text-accent">

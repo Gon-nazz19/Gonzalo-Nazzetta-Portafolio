@@ -11,7 +11,7 @@ import { formacion, idiomas } from '../data/perfil';
     <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-lg">
       {
         formacion.map((f) => (
-          <li class="reveal bg-surface border border-accent/20 rounded-lg p-lg flex flex-col gap-sm hover:border-accent/50 transition-colors duration-200">
+          <li class="reveal fx-card fx-tilt bg-surface border border-accent/20 rounded-lg p-lg flex flex-col gap-sm hover:border-accent/50 transition-colors duration-200">
             <GraduationCap class="w-6 h-6 text-accent" aria-hidden="true" />
             <h3 class="font-headline text-title-md text-on-surface text-balance">{f.titulo}</h3>
             <p class="font-body text-body-sm text-on-surface-muted">{f.institucion}</p>
@@ -19,7 +19,7 @@ import { formacion, idiomas } from '../data/perfil';
           </li>
         ))
       }
-      <li class="reveal bg-surface border border-accent/20 rounded-lg p-lg flex flex-col gap-sm hover:border-accent/50 transition-colors duration-200">
+      <li class="reveal fx-card fx-tilt bg-surface border border-accent/20 rounded-lg p-lg flex flex-col gap-sm hover:border-accent/50 transition-colors duration-200">
         <Languages class="w-6 h-6 text-accent" aria-hidden="true" />
         <h3 class="font-headline text-title-md text-on-surface">Idiomas</h3>
         <p class="font-body text-body-sm text-on-surface-muted">{idiomas}</p>

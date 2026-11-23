@@ -20,7 +20,7 @@ const nodos = ['bg-accent', 'bg-primary', 'bg-secondary', 'bg-on-surface-muted']
       <ol class="flex flex-col gap-lg">
         {
           experiencia.map((e, i) => (
-            <li class:list={['reveal relative bg-surface border rounded-lg p-lg flex flex-col gap-md', i === 0 ? 'border-accent/30' : 'border-accent/20']}>
+            <li class:list={['reveal fx-card relative bg-surface border rounded-lg p-lg flex flex-col gap-md', i === 0 ? 'border-accent/30' : 'border-accent/20']}>
               <span
                 class:list={['absolute -left-[29px] top-7 w-4 h-4 rounded-full border-4 border-background', nodos[i % nodos.length]]}
                 aria-hidden="true"
