@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://gon-nazz19.github.io/Gonzalo-Nazzetta-Portafolio/sitemap-index.xml
