@@ -10,7 +10,8 @@ repo: ""   # Proyecto privado de un cliente: dejar vacío
 tags: ["Supabase", "PostgreSQL", "Render", "Cloudflare", "GitHub Actions", "Looker Studio"]
 # Solo capturas SIN datos reales de clientes (anonimizadas) o diagramas.
 imagenes: []
-links: []
+links:
+  - { tipo: "demo", label: "Ver landing", url: "https://www.estudio-rosso.com.ar/" }
 ---
 
 ## Desafíos técnicos

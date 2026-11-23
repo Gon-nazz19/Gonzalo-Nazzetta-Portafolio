@@ -9,8 +9,16 @@ resumen: "Pipeline ETL que toma archivos operativos desordenados de clientes, fa
 repo: ""   # URL del repositorio en GitHub (vacío = no se muestra el ícono)
 tags: ["Python", "n8n", "Docker", "Google Sheets API", "Google Drive API", "Looker Studio", "K-Means"]
 # Imágenes en public/proyectos/pipeline-metalurgica-cesca/
-# - { src: "arquitectura.png", alt: "Diagrama del pipeline", caption: "Arquitectura del pipeline" }
-imagenes: []
+imagenes:
+  - src: "flujo-pipeline.jpg"
+    alt: "Flujo de n8n del pipeline: análisis de duplicados, limpieza de archivos con scripts de Python, carga en Google Sheets y eliminación de los archivos locales"
+    caption: "Flujo del pipeline en n8n"
+  - src: "panel-inicial.jpg"
+    alt: "Pantalla inicial del Panel Ejecutivo de Gestión de Metalúrgica Cesca con accesos a montos y cantidades facturadas, clientes, evolución de ventas, comprobantes por localidad, mapa de calor y estado de clientes"
+    caption: "Panel ejecutivo: selección del área de análisis"
+  - src: "estadisticas.jpg"
+    alt: "Tablero de monto de productos facturados con filtros, indicadores y el top 20 de productos por monto vendido, con los valores difuminados"
+    caption: "Tablero de productos facturados (valores ocultos)"
 # tipo: docs | repo | paper | demo | video | presentacion | api | otro
 # - { tipo: "docs", label: "Documentación Técnica", url: "https://..." }
 links: []
