@@ -30,7 +30,7 @@ export const categorias: Categoria[] = [
     nombre: 'Frameworks',
     items: ['React', 'Next.js', 'Node.js', 'Express.js', 'NestJS', 'Django REST Framework', 'Tailwind CSS', 'Material-UI'],
   },
-  { nombre: 'Cloud', items: ['Google Cloud', 'Cloudflare Workers', 'Wrangler CLI', 'Render'] },
+  { nombre: 'Cloud', items: ['Google Cloud', 'Cloudflare Workers', 'Wrangler CLI', 'Render', 'Vercel'] },
   { nombre: 'Control de versiones', items: ['Git', 'GitHub', 'GitLab'] },
   { nombre: 'Herramientas', items: ['VS Code', 'IntelliJ IDEA', 'Jira', 'Postman', 'pgAdmin'] },
   {
@@ -85,7 +85,6 @@ export const metodologias: string[] = [
   'Metodologías ágiles (Scrum) y en cascada',
   'Diseño de APIs RESTful e idempotencia',
   'Diseño de transacciones ACID y manejo de concurrencia',
-  'Testing manual y automatizado; diseño y ejecución de casos de prueba',
   'Trazabilidad de requerimientos y casos de prueba',
   'Calidad y trazabilidad de datos (ETL, control de duplicados, versionado)',
   'Documentación funcional y técnica',

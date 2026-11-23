@@ -63,7 +63,7 @@ export const experiencia: Experiencia[] = [
   {
     puesto: 'Miembro Investigador',
     organizacion: 'DataStatLab, UTN San Francisco',
-    periodo: '2024 – 2025',
+    periodo: '2024 – 2026',
     items: [
       'Desarrollo de modelos estadísticos y de machine learning aplicados a datos reales.',
       'Diseño e implementación de encuestas para relevamiento de datos, gestionando la recolección, estructuración y presentación de resultados.',
