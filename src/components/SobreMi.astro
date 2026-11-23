@@ -1,8 +1,6 @@
 ---
 import { ChartLine, Compass, FileText, FlaskConical } from '@lucide/astro';
-import { Image } from 'astro:assets';
 import SectionHeader from './SectionHeader.astro';
-import foto from '../assets/gonzalo-nazzetta.webp';
 import { kpis, sobreMi, type Kpi } from '../data/perfil';
 
 const iconos: Record<Kpi['icono'], typeof FileText> = {
@@ -18,31 +16,14 @@ const iconos: Record<Kpi['icono'], typeof FileText> = {
     <SectionHeader id="sobre-mi-titulo" codigo="> sobre_mi.py" titulo="Sobre mí" />
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-lg items-stretch">
-      <article class="reveal fx-card lg:col-span-7 bg-surface border border-accent/20 rounded-lg p-lg flex flex-col sm:flex-row items-center sm:items-start gap-lg">
-        <!-- Foto: anillo fino en gradiente primario y glow suave -->
-        <div class="relative shrink-0">
-          <div class="absolute -inset-3 rounded-full bg-primary/25 blur-2xl" aria-hidden="true"></div>
-          <div class="relative rounded-full p-[2px] bg-linear-to-br from-primary to-accent shadow-[0_0_32px_-4px_rgb(79_195_247/0.45)]">
-            <Image
-              src={foto}
-              alt="Gonzalo Nazzetta"
-              width={160}
-              height={160}
-              densities={[1, 2]}
-              loading="lazy"
-              class="block w-32 h-32 sm:w-36 sm:h-36 lg:w-40 lg:h-40 rounded-full object-cover border-4 border-surface"
-            />
-          </div>
-        </div>
-        <div class="flex flex-col gap-md">
-          {
-            sobreMi.map((p, i) => (
-              <p class:list={['font-body text-pretty', i === 0 ? 'text-body-lg text-on-surface' : 'text-body-md text-on-surface-muted']}>
-                {p}
-              </p>
-            ))
-          }
-        </div>
+      <article class="reveal fx-card lg:col-span-7 bg-surface border border-accent/20 rounded-lg p-lg flex flex-col gap-md">
+        {
+          sobreMi.map((p, i) => (
+            <p class:list={['font-body text-pretty', i === 0 ? 'text-body-lg text-on-surface' : 'text-body-md text-on-surface-muted']}>
+              {p}
+            </p>
+          ))
+        }
       </article>
 
       <ul class="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-lg" aria-label="Indicadores">

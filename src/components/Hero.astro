@@ -1,16 +1,37 @@
 ---
 import { ArrowDown, Compass, Download, MapPin } from '@lucide/astro';
+import { Image } from 'astro:assets';
 import HeroChart from './HeroChart.astro';
+import foto from '../assets/gonzalo-nazzetta.webp';
 import { datos } from '../data/perfil';
 import { withBase } from '../lib/url';
 ---
 
 <section id="inicio" aria-labelledby="hero-titulo" class="relative border-b border-outline/70 overflow-hidden">
-  <div class="absolute inset-0 pointer-events-none hidden lg:flex items-center justify-end opacity-65">
+  <div class="absolute inset-0 pointer-events-none hidden lg:flex items-center justify-end opacity-35">
     <HeroChart />
   </div>
 
-  <div class="max-w-[1200px] mx-auto px-md lg:px-lg py-2xl lg:py-3xl relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-lg items-center">
+  <div class="max-w-[1200px] mx-auto px-md lg:px-lg py-2xl lg:py-3xl relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-xl lg:gap-2xl items-center">
+    <!-- Foto: anillo fino en gradiente primario y glow suave -->
+    <div class="lg:col-span-4 flex justify-center lg:justify-start">
+      <div class="relative">
+        <div class="absolute -inset-6 rounded-full bg-primary/25 blur-3xl" aria-hidden="true"></div>
+        <div class="relative rounded-full p-[3px] bg-linear-to-br from-primary to-accent shadow-[0_0_48px_-6px_rgb(79_195_247/0.5)]">
+          <Image
+            src={foto}
+            alt="Gonzalo Nazzetta"
+            width={300}
+            height={300}
+            densities={[1, 2]}
+            loading="eager"
+            fetchpriority="high"
+            class="block w-44 h-44 sm:w-56 sm:h-56 lg:w-[300px] lg:h-[300px] rounded-full object-cover border-[6px] border-background"
+          />
+        </div>
+      </div>
+    </div>
+
     <div class="lg:col-span-8 flex flex-col gap-lg">
       <p class="inline-flex items-center gap-sm self-start px-md py-xs rounded-full bg-surface border border-accent/25">
         <MapPin class="w-4 h-4 text-accent" aria-hidden="true" />
@@ -23,18 +44,6 @@ import { withBase } from '../lib/url';
         </h1>
         <p class="font-headline text-title-lg lg:text-headline-md text-accent text-balance">{datos.titulo}</p>
         <p class="font-body text-body-md lg:text-body-lg text-on-surface-muted max-w-[42rem] text-pretty">{datos.bajada}</p>
-      </div>
-
-      <!-- Mini gráfico solar (móvil y tablet) -->
-      <div class="lg:hidden bg-surface border border-accent/25 rounded-lg p-md flex flex-col gap-sm" aria-hidden="true">
-        <span class="font-mono text-mono-sm text-accent">pronostico_solar.py</span>
-        <svg viewBox="0 0 320 90" class="w-full h-24" fill="none">
-          <circle cx="235" cy="24" r="10" fill="#162D52" stroke="#4FC3F7" stroke-width="1.5"></circle>
-          <path d="M10 74 C 50 68, 85 44, 130 50 C 148 52, 160 40, 172 36" stroke="#1E6FFF" stroke-width="2.5" stroke-linecap="round"></path>
-          <path d="M172 36 C 205 22, 245 20, 305 32" stroke="#4FC3F7" stroke-width="2.5" stroke-dasharray="5 5" stroke-linecap="round"></path>
-          <path d="M172 24 C 205 12, 245 10, 305 20 L 305 44 C 245 34, 205 36, 172 48 Z" fill="#4FC3F7" fill-opacity="0.16"></path>
-          <circle cx="172" cy="36" r="3.5" fill="#4FC3F7"></circle>
-        </svg>
       </div>
 
       <div class="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-md pt-sm">
@@ -54,32 +63,6 @@ import { withBase } from '../lib/url';
           Descargar CV
           <span class="sr-only">(PDF)</span>
         </a>
-      </div>
-    </div>
-
-    <!-- Tarjeta del modelo (sin cifras: solo datos del perfil) -->
-    <div class="hidden lg:flex lg:col-span-4 flex-col gap-md">
-      <div class="fx-card fx-tilt bg-surface border border-accent/25 rounded-lg p-lg flex flex-col gap-md shadow-xl">
-        <div class="flex items-center justify-between gap-sm">
-          <span class="font-mono text-mono-sm text-accent">pronostico_solar.py</span>
-          <span class="inline-flex items-center px-sm py-xs rounded-full bg-success/15 text-success font-mono text-label-sm whitespace-nowrap">
-            SARIMA + HW
-          </span>
-        </div>
-        <dl class="grid grid-cols-2 gap-md">
-          <div class="bg-background rounded-md p-md border border-outline">
-            <dt class="font-mono text-label-sm text-on-surface-muted">Serie</dt>
-            <dd class="font-mono text-title-md text-on-surface">5 años de datos reales</dd>
-          </div>
-          <div class="bg-background rounded-md p-md border border-outline">
-            <dt class="font-mono text-label-sm text-on-surface-muted">Modelos</dt>
-            <dd class="font-mono text-title-md text-accent">Holt-Winters · SARIMA</dd>
-          </div>
-        </dl>
-        <div class="flex items-center justify-between text-on-surface-muted font-mono text-mono-sm pt-sm border-t border-outline">
-          <span>Paper publicado</span>
-          <span class="text-accent">RPIC 2025</span>
-        </div>
       </div>
     </div>
   </div>
