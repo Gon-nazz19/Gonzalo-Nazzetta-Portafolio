@@ -4,7 +4,7 @@ contexto: "Metalúrgica Cesca · Vinculación UTN San Francisco"
 rol: "Data Engineer & Analista de Datos"
 periodo: "2024 – 2025"
 estado: "finalizado"
-orden: 1
+orden: 2
 resumen: "Pipeline ETL que toma archivos operativos desordenados de clientes, facturación y deudores y los convierte en información estructurada para el análisis gerencial, con dashboards de KPIs y segmentación de clientes."
 repo: ""   # URL del repositorio en GitHub (vacío = no se muestra el ícono)
 tags: ["Python", "n8n", "Docker", "Google Sheets API", "Google Drive API", "Looker Studio", "K-Means"]

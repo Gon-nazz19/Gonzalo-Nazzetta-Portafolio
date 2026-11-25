@@ -4,7 +4,7 @@ contexto: "GISAI · UTN San Francisco · Paper RPIC 2025"
 rol: "Investigador & Coautor"
 periodo: "2024 – 2025"
 estado: "publicado"
-orden: 2
+orden: 3
 resumen: "Análisis de cinco años de datos reales de producción fotovoltaica y comparación de modelos de series de tiempo (Holt-Winters y SARIMA) para predecir la generación futura. Resultados publicados en RPIC 2025."
 repo: ""
 tags: ["Python", "pandas", "Series de tiempo", "SARIMA", "Holt-Winters"]

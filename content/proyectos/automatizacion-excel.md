@@ -4,7 +4,7 @@ contexto: "Proyecto profesional"
 rol: "Analista de Datos"
 periodo: "2024"
 estado: "finalizado"
-orden: 4
+orden: 5
 resumen: "Reportes que se actualizan solos: tablas dinámicas, gráficos y modelos de regresión logarítmica que se adaptan a entradas de datos variables."
 repo: ""
 tags: ["Excel", "Regresión logarítmica", "Automatización"]

@@ -4,7 +4,7 @@ contexto: "Estudio Rosso"
 rol: "Desarrollador & Administrador de Datos"
 periodo: "2026 – Actualidad"
 estado: "en producción"
-orden: 3
+orden: 4
 resumen: "Portal web en producción para gestionar los clientes del estudio, con base de datos PostgreSQL en Supabase, automatizaciones con GitHub Actions, dashboards de seguimiento, monitoreo y backups semanales."
 repo: ""   # Proyecto privado de un cliente: dejar vacío
 tags: ["Supabase", "PostgreSQL", "Render", "Cloudflare", "GitHub Actions", "Looker Studio"]

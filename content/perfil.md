@@ -59,6 +59,12 @@ En DataStatLab trabajé en análisis de datos y modelos estadísticos aplicados 
 
 Resumen de cada proyecto para la tarjeta. El detalle (galería, links a docs, descripción larga) está en `content/proyectos/<slug>.md`.
 
+### Detección Automática de Daños Viales con IA
+*2026 – Actualidad · Proyecto Final de Ingeniería · UTN San Francisco · Municipalidad de San Francisco*
+Sistema que procesa video de recorridos viales sincronizado con trazas GPS para detectar, clasificar y georreferenciar daños en las calles (baches y fisuras) con un modelo YOLOv8 entrenado con imágenes locales, y los muestra en una interfaz web con mapa interactivo, mapa de calor, KPIs y reportes PDF.
+**Tags:** Python, YOLOv8, OpenCV, FastAPI, Celery, Redis, PostgreSQL, PostGIS, React, Leaflet.js, Docker, JWT
+**Links:** ninguno por ahora
+
 ### Pipeline de Datos End-to-End — Metalúrgica Cesca
 *2024 – 2025 · Vinculación UTN San Francisco*
 Pipeline ETL que transforma archivos operativos desordenados en información estructurada para análisis gerencial: detección automática de archivos, limpieza y normalización con Python, control de duplicados y trazabilidad, carga y versionado en Google Sheets/Drive vía APIs, dashboards de KPIs en Looker Studio y segmentación de clientes con K-Means.
@@ -92,13 +98,13 @@ de logos destacados.
 - **Lenguajes:** Python ★, SQL ★, Java, JavaScript, TypeScript, HTML, CSS, Bash
 - **Datos y análisis:** pandas ★, NumPy ★, análisis exploratorio de datos, estadística, series de tiempo (SARIMA, Holt-Winters, LSTM), K-Means
 - **BI y visualización:** Looker Studio ★, Power BI ★, Excel avanzado, Google Sheets ★
-- **Bases de datos:** PostgreSQL ★, MySQL ★, Supabase ★, MongoDB, SQLite, Cloudflare D1
-- **Automatización y DevOps:** n8n ★, GitHub Actions ★, Docker ★, Jenkins
-- **Frameworks:** React, Next.js, Node.js, Express.js, NestJS, Django REST Framework, Tailwind CSS, Material-UI
+- **Bases de datos:** PostgreSQL ★, MySQL ★, Supabase ★, MongoDB, SQLite, Cloudflare D1, PostGIS
+- **Automatización y DevOps:** n8n ★, GitHub Actions ★, Docker ★, Jenkins, Celery, Redis
+- **Frameworks:** React, Next.js, Node.js, Express.js, NestJS, Django REST Framework, Tailwind CSS, Material-UI, Leaflet.js
 - **Cloud:** Google Cloud, Cloudflare Workers, Wrangler CLI, Render
 - **Control de versiones:** Git, GitHub, GitLab
 - **Herramientas:** VS Code, IntelliJ IDEA, Jira, Postman, pgAdmin
-- **IA y visión por computadora:** Machine Learning, Visión por Computadora, YOLO, PyTorch, OpenCV, DeepSort, RAG, Embeddings semánticos, MCP (Model Context Protocol), Cloudflare Workers AI, Gemini API, API de Anthropic (Claude)
+- **IA y visión por computadora:** Machine Learning, Visión por Computadora, YOLOv8, PyTorch, OpenCV, DeepSort, RAG, Embeddings semánticos, MCP (Model Context Protocol), Cloudflare Workers AI, Gemini API, API de Anthropic (Claude)
 
 ## Metodologías y conceptos
 

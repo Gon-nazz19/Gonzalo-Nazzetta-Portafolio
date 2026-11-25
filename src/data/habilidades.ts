@@ -24,11 +24,11 @@ export const categorias: Categoria[] = [
     items: ['pandas', 'NumPy', 'Análisis exploratorio de datos', 'Estadística', 'Series de tiempo (SARIMA, Holt-Winters, LSTM)', 'K-Means'],
   },
   { nombre: 'BI y visualización', items: ['Looker Studio', 'Power BI', 'Excel avanzado', 'Google Sheets'] },
-  { nombre: 'Bases de datos', items: ['PostgreSQL', 'MySQL', 'Supabase', 'MongoDB', 'SQLite', 'Cloudflare D1'] },
-  { nombre: 'Automatización y DevOps', items: ['n8n', 'GitHub Actions', 'Docker', 'Jenkins'] },
+  { nombre: 'Bases de datos', items: ['PostgreSQL', 'MySQL', 'Supabase', 'MongoDB', 'SQLite', 'Cloudflare D1', 'PostGIS'] },
+  { nombre: 'Automatización y DevOps', items: ['n8n', 'GitHub Actions', 'Docker', 'Jenkins', 'Celery', 'Redis'] },
   {
     nombre: 'Frameworks',
-    items: ['React', 'Next.js', 'Node.js', 'Express.js', 'NestJS', 'Django REST Framework', 'Tailwind CSS', 'Material-UI'],
+    items: ['React', 'Next.js', 'Node.js', 'Express.js', 'NestJS', 'Django REST Framework', 'Tailwind CSS', 'Material-UI', 'Leaflet.js'],
   },
   { nombre: 'Cloud', items: ['Google Cloud', 'Cloudflare Workers', 'Wrangler CLI', 'Render', 'Vercel'] },
   { nombre: 'Control de versiones', items: ['Git', 'GitHub', 'GitLab'] },
@@ -38,7 +38,7 @@ export const categorias: Categoria[] = [
     items: [
       'Machine Learning',
       'Visión por Computadora',
-      'YOLO',
+      'YOLOv8',
       'PyTorch',
       'OpenCV',
       'DeepSort',
