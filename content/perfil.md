@@ -100,7 +100,7 @@ de logos destacados.
 - **BI y visualización:** Looker Studio ★, Power BI ★, Excel avanzado, Google Sheets ★
 - **Bases de datos:** PostgreSQL ★, MySQL ★, Supabase ★, MongoDB, SQLite, Cloudflare D1, PostGIS
 - **Automatización y DevOps:** n8n ★, GitHub Actions ★, Docker ★, Jenkins, Celery, Redis
-- **Frameworks:** React, Next.js, Node.js, Express.js, NestJS, Django REST Framework, Tailwind CSS, Material-UI, Leaflet.js
+- **Frameworks:** React, Next.js, Node.js, Express.js, NestJS, Django REST Framework, FastAPI, Tailwind CSS, Material-UI, Leaflet.js
 - **Cloud:** Google Cloud, Cloudflare Workers, Wrangler CLI, Render
 - **Control de versiones:** Git, GitHub, GitLab
 - **Herramientas:** VS Code, IntelliJ IDEA, Jira, Postman, pgAdmin

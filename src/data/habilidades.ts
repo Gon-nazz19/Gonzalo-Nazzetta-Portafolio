@@ -28,7 +28,7 @@ export const categorias: Categoria[] = [
   { nombre: 'Automatización y DevOps', items: ['n8n', 'GitHub Actions', 'Docker', 'Jenkins', 'Celery', 'Redis'] },
   {
     nombre: 'Frameworks',
-    items: ['React', 'Next.js', 'Node.js', 'Express.js', 'NestJS', 'Django REST Framework', 'Tailwind CSS', 'Material-UI', 'Leaflet.js'],
+    items: ['React', 'Next.js', 'Node.js', 'Express.js', 'NestJS', 'Django REST Framework', 'FastAPI', 'Tailwind CSS', 'Material-UI', 'Leaflet.js'],
   },
   { nombre: 'Cloud', items: ['Google Cloud', 'Cloudflare Workers', 'Wrangler CLI', 'Render', 'Vercel'] },
   { nombre: 'Control de versiones', items: ['Git', 'GitHub', 'GitLab'] },
