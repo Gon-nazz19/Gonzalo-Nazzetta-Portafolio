@@ -8,9 +8,16 @@ orden: 1
 resumen: "Sistema que procesa video de recorridos viales sincronizado con trazas GPS para detectar, clasificar y georreferenciar daños en las calles (baches y fisuras) con un modelo YOLOv8 entrenado con imágenes locales, y los muestra en una interfaz web con mapa interactivo, mapa de calor, KPIs y reportes PDF."
 repo: ""
 tags: ["Python", "YOLOv8", "OpenCV", "FastAPI", "Celery", "Redis", "PostgreSQL", "PostGIS", "React", "Leaflet.js", "Docker", "JWT"]
-# Imágenes en public/proyectos/deteccion-danos-viales/
-# - { src: "mapa-danos.png", alt: "Mapa interactivo con daños detectados", caption: "Mapa interactivo de daños" }
-imagenes: []
+imagenes:
+  - src: "deteccion-fisura-longitudinal.jpg"
+    alt: "Grilla de nueve frames de calles de San Francisco con fisuras longitudinales marcadas por el modelo YOLOv8 en recuadros azules, con confianza de 82 % a 83 %"
+    caption: "Detección de fisuras longitudinales (D00) · confianza 82–83 %"
+  - src: "deteccion-piel-de-cocodrilo-1.jpg"
+    alt: "Grilla de nueve frames de calles con zonas de fisuras tipo piel de cocodrilo marcadas en recuadros violetas y algunas fisuras longitudinales en azul, con confianza de 70 % a 84 %"
+    caption: "Detección de piel de cocodrilo (D20) · confianza 70–84 %"
+  - src: "deteccion-piel-de-cocodrilo-2.jpg"
+    alt: "Grilla de nueve frames de calles con fisuras tipo piel de cocodrilo en recuadros violetas, fisuras longitudinales en azul y fisuras transversales en naranja, con confianza de 61 % a 69 %"
+    caption: "Detección de piel de cocodrilo (D20) · confianza 61–69 %"
 links: []
 ---
 
